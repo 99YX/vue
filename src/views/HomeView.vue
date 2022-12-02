@@ -195,6 +195,8 @@
 <script>
 
 
+import request from "@/utils/request";
+
 export default {
   name: 'HomeView',
   data() {
@@ -262,17 +264,38 @@ export default {
       //鼠标点击后从新请求地址
     load()
     {
+
+
+      /*axios封装get请求*/
+      request.get("http://localhost:8083/User/page", {params:
+      {
+              /*前端通过动态绑定获取参数，传给后端*/
+             pageNum:this.pageNum,
+             pageSize:this.pageSize,
+             username:this.username
+
+      }
+      }).then(res=>{
+
+
+        console.log(res),
+            /*将从后台获取到的数据传给前端展示*/
+            this.tableData=res.records
+            /*获取总条数*/
+            this.total=res.total
+      })
+
       //请求后端数据 res=>res.json()将获取到的数据转变成json
 
       /*http://localhost:8083/User/page?pageNum=1&pageSize=3*/
       /*+ "&username=" + this.username*/
-      fetch("http://localhost:8083/User/page?pageNum="+this.pageNum+"&pageSize=" + this.pageSize+"&username=" + this.username)
+      /*fetch("http://localhost:8083/User/page?pageNum="+this.pageNum+"&pageSize=" + this.pageSize+"&username=" + this.username)
           .then(res => res.json()).then(res => {
         console.log(res)
         this.tableData = res.data
         this.total = res.total
 
-      })
+      })*/
 
     },
     /*获取当前的条数*/
