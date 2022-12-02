@@ -1,0 +1,46 @@
+/*让多个选择器具有相同样式:A选择器+‘，’+B选择器+‘，’+C选择器
+   满足选择器规则的多个标签都采用同一种 css 样式
+*/
+/*html,body,div{
+    margin: 0;
+    padding: 0;
+}*/
+
+/*全局设置,去除elementui自带缝隙*/
+* {
+    margin: 0;
+    padding: 0;
+    /*盒子模型是指：外边距（margin）+
+    border（边框） +内边距（padding）+content（内容）
+    盒子模型会自动根据padding和border的值来调整content的值，就不需要手动调整
+    */
+    box-sizing: border-box;
+}
+
+
+/*导航栏高度*/
+html, body {
+    height: 100%;
+}
+
+.ml-5 {
+    margin-left: 5px;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+.pd-10 {
+    padding: 10px 0;
+}
+
+.m-10 {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #666;
+}
+
