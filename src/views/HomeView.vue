@@ -138,10 +138,11 @@
           <div style="margin: 10px 0">
                   <!--     动态绑定自己的姓名，支持模糊搜索     -->
             <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="username"></el-input>
-            <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5"></el-input>
-            <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>
+            <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5" v-model="email"></el-input>
+            <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5" v-model="address"></el-input>
             <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
                      <!--    @click="load" 点击事件触发函数，分页查询        -->
+            <el-button class="ml-5" type="danger" @click="reset">重置</el-button>
           </div>
           <!--  按钮  -->
           <div style="margin: 10px 0">
@@ -207,6 +208,8 @@ export default {
       pageNum: 1,
       pageSize: 2,
       username: '',
+      email:'',
+      address:'',
       /*收缩按钮*/
       collapseBtnClass: 'el-icon-s-fold',
       /*收缩按钮是否关闭 默认是展开的*/
@@ -272,7 +275,9 @@ export default {
               /*前端通过动态绑定获取参数，传给后端*/
              pageNum:this.pageNum,
              pageSize:this.pageSize,
-             username:this.username
+             username:this.username,
+             email:this.email,
+             address:this.address
 
       }
       }).then(res=>{
@@ -296,6 +301,17 @@ export default {
         this.total = res.total
 
       })*/
+
+    },
+    /*重置信息*/
+    reset()
+    {
+           /*信息重置为空*/
+          this.pageNum='',
+          this.pageSize='',
+          this.username='',
+          this.email='',
+          this.address=''
 
     },
     /*获取当前的条数*/
