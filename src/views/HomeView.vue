@@ -141,16 +141,49 @@
             <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5" v-model="email"></el-input>
             <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5" v-model="address"></el-input>
             <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
-                     <!--    @click="load" 点击事件触发函数，分页查询        -->
+                     <!--    @click="load" 点击事件触发函数，分页查询   " @click="reset" 重置信息      -->
             <el-button class="ml-5" type="danger" @click="reset">重置</el-button>
           </div>
           <!--  按钮  -->
           <div style="margin: 10px 0">
-            <el-button type="primary">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+            <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
             <el-button type="danger">批量删除 <i class="el-icon-remove-outline"></i></el-button>
             <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>
             <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>
           </div>
+
+
+              <!--  点击新增弹出对话框    form对象在data种必须要有  width="30%" 控制整个表单的宽度   -->
+          <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="30%" >
+            <el-form label-width="80px" size="small">
+              <el-form-item label="用户名">
+                <el-input v-model="form.username" autocomplete="off"></el-input>
+              </el-form-item>
+<!--              <el-form-item label="角色">
+                <el-select clearable v-model="form.role" placeholder="请选择角色" style="width: 100%">
+                  <el-option v-for="item in roles" :key="item.name" :label="item.name" :value="item.flag"></el-option>
+                </el-select>
+              </el-form-item>-->
+              <el-form-item label="昵称">
+                <el-input v-model="form.nickname" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="form.email" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="电话">
+                <el-input v-model="form.phone" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="地址">
+                <el-input v-model="form.address" autocomplete="off"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button  type="warning" @click="cancel">取 消</el-button>
+              <el-button type="primary" @click="save">确 定</el-button>
+            </div>
+                        <!--     save：新增用户信息       -->
+          </el-dialog>
+
 
           <!-- 表格设置边框 :<el-table  border  stripe" > </el-table>-->
           <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
@@ -162,8 +195,8 @@
             <el-table-column prop="address" label="地址"></el-table-column>
             <el-table-column label="操作" width="200" align="center">
               <template slot-scope="scope">
-                <!--                style="margin-left: 10px" "margin-top: 10px" 自己加的代码-->
-                <el-button type="success" style="margin-left: 10px">编辑 <i class="el-icon-edit"></i></el-button>
+                <!--                style="margin-left: 10px" "margin-top: 10px" 自己加的代码 scope.row:{tableData当中的id、username、address....}-->
+                <el-button type="success" style="margin-left: 10px" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
                 <el-button type="danger" style="margin-top: 10px">删除 <i class="el-icon-remove-outline"></i></el-button>
               </template>
             </el-table-column>
@@ -208,8 +241,11 @@ export default {
       pageNum: 1,
       pageSize: 2,
       username: '',
+      nickname:'',
       email:'',
       address:'',
+      dialogFormVisible:false,
+      form:{},
       /*收缩按钮*/
       collapseBtnClass: 'el-icon-s-fold',
       /*收缩按钮是否关闭 默认是展开的*/
@@ -270,7 +306,7 @@ export default {
 
 
       /*axios封装get请求*/
-      request.get("http://localhost:8083/User/page", {params:
+      request.get("/User/page", {params:
       {
               /*前端通过动态绑定获取参数，传给后端*/
              pageNum:this.pageNum,
@@ -307,11 +343,75 @@ export default {
     reset()
     {
            /*信息重置为空*/
-          this.pageNum='',
-          this.pageSize='',
-          this.username='',
           this.email='',
-          this.address=''
+          this.address='',
+          this.username='',
+
+              /*调用load查询*/
+         this.load()
+
+    },
+    /*点击新增时候触发此方法*/
+    handleAdd(){
+
+      //dialogFormVisible默认是false
+      this.dialogFormVisible=true
+
+    },
+    /*点击确定，前端向后端发送请求保存数据*/
+    save()
+    {
+      request.post("/User/user",this.form).then(res=>{
+
+           // res 返回 true/false
+
+          if(res)
+          {
+                 /*  如果返回 true*/
+
+            this.$message.success("保存成功")
+            //清空信息
+            this.form=''
+
+
+            /*关闭对话框 dialogFormVisible默认是false*/
+
+            this.dialogFormVisible=false
+
+
+
+
+          }
+          else{
+            /*如果返回 fasle*/
+
+            this.$message.success("保存失败")
+        }
+      })
+
+
+    },
+
+    /*编辑数据,传入参数*/
+    handleEdit(row)
+    {
+      /*打印数据*/
+      console.log(row)
+      /*将row中的数据赋予对话框*/
+      this.form=row
+      //打开对话框
+      this.dialogFormVisible=true
+
+      /*查询*/
+      this.load()
+
+    },
+    /*点击取消事件*/
+    cancel(){
+
+
+          this.dialogFormVisible = false,
+          this.form=''
 
     },
     /*获取当前的条数*/
