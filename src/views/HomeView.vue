@@ -186,7 +186,13 @@
 
 
           <!-- 表格设置边框 :<el-table  border  stripe" > </el-table>-->
-          <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
+          <!--      @selection-change="handleSelectionChange" 批量删除事件     -->
+          <el-table :data="tableData" border stripe :header-cell-class-name="headerBg"   @selection-change="handleSelectionChange">
+             <!--       多选框        -->
+            <el-table-column
+                type="selection"
+                width="55">
+            </el-table-column>
             <el-table-column prop="id" label="ID" width="80"></el-table-column>
             <el-table-column prop="username" label="用户名" width="140"></el-table-column>
             <el-table-column prop="nickname" label="昵称" width="120"></el-table-column>
@@ -196,12 +202,27 @@
             <el-table-column label="操作" width="200" align="center">
               <template slot-scope="scope">
                 <!--                style="margin-left: 10px" "margin-top: 10px" 自己加的代码 scope.row:{tableData当中的id、username、address....}-->
-                <el-button type="success" style="margin-left: 10px" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
-                <el-button type="danger" style="margin-top: 10px">删除 <i class="el-icon-remove-outline"></i></el-button>
+                <el-button type="success" style="margin-left: 5px" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i></el-button>
+                     <!--    二次删除测试            -->
+                <el-popconfirm
+                    class="ml-5"
+                    confirm-button-text='确定'
+                    cancel-button-text='我再想想'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    title="您确定删除吗？"
+                    @confirm="handleDelet(scope.row.id)"
+                >
+                       <!--      @confirm="handleDelet(scope.row.id)" 通过confirm触发事件            -->
+                              <!--      style="margin-top: 10px"距离顶部10px            -->
+                  <el-button type="danger" slot="reference" style="margin-top: 10px">删除 <i class="el-icon-remove-outline"></i></el-button>
+                </el-popconfirm>
               </template>
             </el-table-column>
 
           </el-table>
+
+
           <!--           分页   -->
           <div style="padding: 10px 0">
             <span class="demonstration">完整功能</span>
@@ -246,6 +267,7 @@ export default {
       address:'',
       dialogFormVisible:false,
       form:{},
+      visible:false,
       /*收缩按钮*/
       collapseBtnClass: 'el-icon-s-fold',
       /*收缩按钮是否关闭 默认是展开的*/
@@ -254,7 +276,9 @@ export default {
       logoTextShow: true,
       //给表格设置一个动态选择器
       headerBg: 'headerBg',
-      sideWidth:''
+      sideWidth:'',
+      /*数组：:目的是将复选框的数据存入数组中*/
+      multipleSelection:[]
 
     }
   },
@@ -378,6 +402,8 @@ export default {
 
             this.dialogFormVisible=false
 
+            this.load()
+
 
 
 
@@ -385,7 +411,7 @@ export default {
           else{
             /*如果返回 fasle*/
 
-            this.$message.success("保存失败")
+            this.$message.error("保存失败")
         }
       })
 
@@ -412,6 +438,58 @@ export default {
 
           this.dialogFormVisible = false,
           this.form=''
+
+    },
+   /*删除数据 传入id*/
+    handleDelet(rowId)
+    {
+      /*打印数据*/
+      console.log(rowId)
+
+
+
+      request.delete("/User/"+rowId).then(res=>{
+        // res 返回 true/false
+
+        if(res)
+        {
+          /!*  如果返回 true*!/
+
+          this.$message.success("删除成功")
+
+          this.load()
+
+
+
+
+
+
+
+        }
+        else{
+          /!*如果返回 fasle*!/
+
+          this.$message.error("删除失败")
+          this.load()
+        }
+      })
+
+
+
+
+
+
+    },
+    /*批量删除事件*/
+    handleSelectionChange(val){
+      /*点击复选框传过来的数据*/
+      console.log(val)
+      /*将复选框的数据传入定义好的数组中*/
+
+      this.multipleSelection=val
+
+
+
 
     },
     /*获取当前的条数*/
