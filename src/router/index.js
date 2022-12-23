@@ -13,8 +13,8 @@ const routes = [
         children:[
             {
                 path: '/',
-                name: 'Manage',
-                component: () => import('../views/Manage.vue'),
+                name: 'Aside',
+                component: () => import('../components/Aside.vue'),
             }
 
         ]
