@@ -147,8 +147,20 @@
           <!--  按钮  -->
           <div style="margin: 10px 0">
             <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
-            <el-button type="danger">批量删除 <i class="el-icon-remove-outline"></i></el-button>
-            <el-button type="primary">导入 <i class="el-icon-bottom"></i></el-button>
+            <el-popconfirm
+                class="ml-5"
+                confirm-button-text='确定'
+                cancel-button-text='我再想想'
+                icon="el-icon-info"
+                icon-color="red"
+                title="您确定批量删除吗？"
+                @confirm="deleteBatch"
+            >
+              <!--           slot="reference" 必须要有 不然不会显示   -->
+            <el-button type="danger"  slot="reference" >批量删除 <i class="el-icon-remove-outline"></i></el-button>
+
+            </el-popconfirm>
+            <el-button type="primary" class="ml-5">导入 <i class="el-icon-bottom" ></i></el-button>
             <el-button type="primary">导出 <i class="el-icon-top"></i></el-button>
           </div>
 
@@ -234,7 +246,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :page-sizes="[2, 5, 10, 20]"
-                :page-size="10"
+                :page-size="2"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
              <!--      toatal：是从前端传过来的数据通过动态绑定        -->
@@ -330,7 +342,7 @@ export default {
 
 
       /*axios封装get请求*/
-      request.get("/User/page", {params:
+      this.request.get("/page", {params:
       {
               /*前端通过动态绑定获取参数，传给后端*/
              pageNum:this.pageNum,
@@ -385,7 +397,7 @@ export default {
     /*点击确定，前端向后端发送请求保存数据*/
     save()
     {
-      request.post("/User/user",this.form).then(res=>{
+      this.request.post("/user",this.form).then(res=>{
 
            // res 返回 true/false
 
@@ -448,7 +460,7 @@ export default {
 
 
 
-      request.delete("/User/"+rowId).then(res=>{
+      this.request.delete("/"+rowId).then(res=>{
         // res 返回 true/false
 
         if(res)
@@ -488,10 +500,46 @@ export default {
 
       this.multipleSelection=val
 
+    },
+    /*点击批量删除*/
+    deleteBatch(){
+      /*因为这个时候获取的数据的对象，而接口需要的是list数据 所以数据要处理*/
+      let ids=this.multipleSelection.map(v=>v.id)
+      /*请求后端批量删除的接口*/
+
+      /*delete不支持传入对象 所以使用post*/
+      this.request.post("/batch/delete", ids).then(res=>{
+        console.log(res)
+        if(res)
+        {
+
+
+          this.$message.success("删除成功")
+
+          this.load()
+
+
+
+
+
+
+
+        }
+        else{
+
+
+          this.$message.error("删除失败")
+          this.load()
+        }
+      })
+
+
+
 
 
 
     },
+
     /*获取当前的条数*/
     handleSizeChange(pageSize) {
       console.log(pageSize)
