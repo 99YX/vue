@@ -342,7 +342,7 @@ export default {
 
 
       /*axios封装get请求*/
-      this.request.get("/page", {params:
+     request.get("/page", {params:
       {
               /*前端通过动态绑定获取参数，传给后端*/
              pageNum:this.pageNum,
@@ -397,7 +397,7 @@ export default {
     /*点击确定，前端向后端发送请求保存数据*/
     save()
     {
-      this.request.post("/user",this.form).then(res=>{
+       request.post("/user",this.form).then(res=>{
 
            // res 返回 true/false
 
@@ -460,7 +460,7 @@ export default {
 
 
 
-      this.request.delete("/"+rowId).then(res=>{
+       request.delete("/"+rowId).then(res=>{
         // res 返回 true/false
 
         if(res)
@@ -508,7 +508,7 @@ export default {
       /*请求后端批量删除的接口*/
 
       /*delete不支持传入对象 所以使用post*/
-      this.request.post("/batch/delete", ids).then(res=>{
+     request.post("/batch/delete", ids).then(res=>{
         console.log(res)
         if(res)
         {

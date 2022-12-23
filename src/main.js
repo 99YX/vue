@@ -10,6 +10,7 @@ import './assets/gloable.css'
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 import request from "@/utils/request.js";
+
 Vue.prototype.request=request()
 new Vue({
     router,
