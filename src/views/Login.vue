@@ -1,7 +1,12 @@
 <template>
+                 <!-- 先写一个div用来包裹-->
     <div class="wrapper">
+
       <div style="margin: 200px auto; background-color: #fff; width: 350px; height: 300px; padding: 20px; border-radius: 10px">
+
+
         <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登 录</b></div>
+
         <el-form ref="userForm">
           <el-form-item prop="username">
             <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" ></el-input>
@@ -10,11 +15,21 @@
             <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-lock" show-password ></el-input>
           </el-form-item>
           <el-form-item style="margin: 10px 0; text-align: right">
+
             <el-button type="primary" size="small"  autocomplete="off" >登录</el-button>
+
             <el-button type="warning" size="small"  autocomplete="off">注册</el-button>
+
           </el-form-item>
+
         </el-form>
-      </div>
+
+
+
+
+    </div>
+
+
     </div>
 
   </template>
@@ -30,8 +45,11 @@ export default {
 
 <style scoped>
 .wrapper {
+  /*100vh：代表视图的高度：100%*/
   height: 100vh;
+  /*渐变的背景色*/
   background-image: linear-gradient(to bottom right, #FC466B , #3F5EFB);
+
   overflow: hidden;
 }
 </style>
