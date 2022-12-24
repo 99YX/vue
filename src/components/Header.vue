@@ -22,14 +22,22 @@
     </el-breadcrumb>
 
 
-  <el-dropdown style="width: 70px;cursor: pointer;margin-left: 850px" >
+  <el-dropdown style="width: 70px;cursor: pointer;margin-left: 750px" >
     <!--设置下拉效果-->
     <span>王小虎</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
 
     <el-dropdown-menu >
       <el-dropdown-item>个人信息</el-dropdown-item>
-      <el-dropdown-item>退出</el-dropdown-item>
-      <el-dropdown-item>删除</el-dropdown-item>
+      <el-dropdown-item  >
+
+      <!--  跳转登录页面     -->
+
+        <router-link to="/login" >退出</router-link>
+
+
+
+      </el-dropdown-item>
+
     </el-dropdown-menu>
   </el-dropdown>
 
