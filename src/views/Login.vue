@@ -8,7 +8,7 @@
         <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登 录</b></div>
 
       <!--    表单校验    -->
-        <el-form :model="user"  ref="userForm">
+        <el-form :model="user"  :rules="rules" ref="userForm">
           <el-form-item prop="username">
             <el-input size="medium" style="margin: 10px 0" prefix-icon="el-icon-user" v-model="user.username"></el-input>
           </el-form-item>
@@ -44,43 +44,66 @@ import request from "@/utils/request";
 export default {
   name: "Login",
   data(){
-    return{
-      user:{
+    return {
+      user: {
+
+      },
 
 
+
+      /*表单验证   <el-form :model="user"  ref="rules"> */
+      rules: {
+        /*通过prop属性*/
+        username: [
+            /*trigger: 'blur' 鼠标失去焦点会校验*/
+          {required: true, message: '请输入用户名', trigger: 'blur'},
+          {min: 1, max: 5, message: '用户名在 1 到 5 个字符', trigger: 'blur'}
+        ],
+        password: [
+          /*trigger: 'blur' 鼠标失去焦点会校验*/
+          {required: true, message: '请输入密码', trigger: 'blur'},
+          {min: 1, max: 6, message: '密码在 1 到 6 个字符', trigger: 'blur'}
+        ]
       }
     }
 
     },
     methods:{
       /*前台向后台发送请求*/
-    login(){
+       login(){
 
-       request.post("/login",this.user).then(res=>{
+         this.$refs['userForm'].validate((valid) => {
+           /*表单校验*/
+           if (valid) {
+             request.post("/login",this.user).then(res=>{
 
-         console.log(res)
-         /*如果后台传回来的数据是true则跳到/,如果是false则账号或者密码错误*/
-         if(!res)
-         {
-           this.$message.error("账号或者密码错误")
+               console.log(res)
+               /*如果后台传回来的数据是true则跳到/,如果是false则账号或者密码错误*/
+               if(!res)
+               {
+                 this.$message.error("账号或者密码错误")
 
-         }
-         else
-         {
-           //跳转到后台
-           this.$router.push("/")
-         }
+               }
+               else
+               {
+                 //跳转到后台
+                 this.$router.push("/")
+               }
 
-       })
+             })
 
+           } else {
+
+             return false
+
+           }
+         });
 
 
 
     }
 
-
-    }
-
+}
 }
 </script>
 
