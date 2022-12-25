@@ -341,6 +341,7 @@ export default {
       request.delete("/"+rowId).then(res=>{
         // res 返回 true/false
 
+        console("--------res-------------"+res)
         if(res)
         {
           /!*  如果返回 true*!/
@@ -387,7 +388,7 @@ export default {
 
       /*delete不支持传入对象 所以使用post*/
       request.post("/batch/delete", ids).then(res=>{
-        console.log(res)
+        console.log(res.data)
         if(res)
         {
 

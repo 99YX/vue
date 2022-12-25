@@ -5,7 +5,7 @@
       <div style="margin: 200px auto; background-color: #fff; width: 350px; height: 300px; padding: 20px; border-radius: 10px">
 
 
-        <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>注册</b></div>
+        <div style="margin: 20px 0; text-align: center; font-size: 24px"><b>登录</b></div>
 
       <!--    表单校验    -->
         <el-form :model="user"  :rules="rules" ref="userForm">
@@ -17,9 +17,15 @@
           </el-form-item>
           <el-form-item style="margin: 10px 0; text-align: right">
 
-            <el-button type="primary" size="small"  autocomplete="off" @click="login">注册</el-button>
+            <el-button type="primary" size="small"  autocomplete="off" @click="login">确定</el-button>
 
-            <el-button type="warning" size="small"  autocomplete="off">返回登录</el-button>
+            <el-button type="warning" size="small"  autocomplete="off">
+
+
+              <router-link to="/register">注册</router-link>
+
+
+            </el-button>
 
           </el-form-item>
 
