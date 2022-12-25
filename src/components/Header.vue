@@ -13,9 +13,9 @@
     <el-dropdown style="width: 150px; cursor: pointer; text-align: right">
 
       <div style="display: inline-block">
-        <img :src="user.avatarUrl" alt=""
+        <img :src="user.avatarUrl" alt="" referrerpolicy="origin-when-cross-origin"
              style="width: 30px; border-radius: 50%; position: relative; top: 10px; right: 5px">
-        <span>{{ user.nickname }}</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
+        <span>{{ user.nickname }} </span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
       </div>
 
       <el-dropdown-menu slot="dropdown" style="width: 100px; text-align: center">
@@ -26,7 +26,7 @@
           <router-link to="/person">个人信息</router-link>
         </el-dropdown-item>
         <el-dropdown-item style="font-size: 14px; padding: 5px 0">
-          <router-link to="/login" >退出</router-link>
+          <span style="text-decoration: none" @click="logout">退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -115,7 +115,12 @@ export default {
       this.$emit("asideCollapse")
     },
     logout() {
-      this.$store.commit("logout")
+      /*退出到登录界面*/
+      this.$router.push("/login")
+
+      /*删除后台传过来的user的信息*/
+      localStorage.removeItem("user")
+
       this.$message.success("退出成功")
     }
   }
