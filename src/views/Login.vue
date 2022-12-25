@@ -77,17 +77,24 @@ export default {
            if (valid) {
              request.post("/login",this.user).then(res=>{
 
-               console.log(res)
+               console.log("-------状态码--------"+res.code)
                /*如果后台传回来的数据是true则跳到/,如果是false则账号或者密码错误*/
-               if(!res)
+
+               if(res.code === '200')
                {
-                 this.$message.error("账号或者密码错误")
+                 this.$message.success('登录成功!')
+                 //将后端传回来的数据保存到浏览器
+                 localStorage.setItem("user",JSON.stringify(res.data))
+                 //跳转到后台
+                 this.$router.push("/")
+
 
                }
                else
                {
-                 //跳转到后台
-                 this.$router.push("/")
+                 /*有问题*/
+                /* this.$message.error(res.msg)*/
+                 this.$message.error('账号或者密码错误!')
                }
 
              })

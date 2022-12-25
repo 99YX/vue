@@ -26,7 +26,7 @@
                <!--    border-bottom:120px solid #ccc;头部下边框线    -->
         <el-header style=" border-bottom:1px solid #ccc">
 
-          <Header :collapseBtnClass="collapseBtnClass"   />
+          <Header :collapseBtnClass="collapseBtnClass"  ></Header>
 
         </el-header>
 
