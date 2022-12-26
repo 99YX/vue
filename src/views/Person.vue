@@ -33,19 +33,22 @@ export default {
   data() {
     return {
 
-      form: {},
+      form: {
+
+      },
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
     }
   },
   //获取用户信息
   created() {
     console.log(this.user.username)
-   request.get("/username/" + this.user.username).then(res=>{
+
+    request.get("/username/" + this.user.username).then(res=>{
 
       console.log("------------res.data----------------"+res.data)
       if(res.data==200)
       {
-        this.form=res;
+        this.form=this.res;
       }
     })
   },
